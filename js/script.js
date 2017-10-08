@@ -6,7 +6,7 @@
 		var obj = JSON.parse(localStorage.getItem(curr));
 			
 		document.getElementById("greet").innerHTML = "Hi, " + obj.name + "!";
-		document.getElementById("inout").setAttribute("src", "logout.png");
+		document.getElementById("inout").setAttribute("src", "img/logout.png");
 		document.getElementById("addimage").style.display = "block";
 		loadUserData();
 
@@ -86,7 +86,7 @@
 		localStorage.setItem(mail, strInsert);
 		localStorage.setItem("currentUser", mail);
 		document.getElementById("AccessWnd").style.display = "none";
-		document.getElementById("inout").setAttribute("src", "logout.png");
+		document.getElementById("inout").setAttribute("src", "img/logout.png");
 		document.getElementById("greet").innerHTML = "Hi, " + usr + "!";
 		document.getElementById("addimage").style.display = "block";
 	}
@@ -105,17 +105,17 @@
 			document.getElementById("greet").innerHTML = "Hi, " + obj.name + "!";
 			localStorage.setItem("currentUser", usr);
 			document.getElementById("AccessWnd").style.display = "none";
-			document.getElementById("inout").setAttribute("src", "logout.png");
+			document.getElementById("inout").setAttribute("src", "img/logout.png");
 			document.getElementById("addimage").style.display = "block";
 		}
 		loadUserData();
 	}
 		
 	function access(){
-		if(document.getElementById("inout").getAttributeNode("src").value === "logout.png"){
+		if(document.getElementById("inout").getAttributeNode("src").value === "img/logout.png"){
 			localStorage.setItem("currentUser", "undefined");
 			document.getElementById("greet").innerHTML = "";
-			document.getElementById("inout").setAttribute("src", "login.png");
+			document.getElementById("inout").setAttribute("src", "img/login.png");
 			document.getElementById("addimage").style.display = "none";
 			var el = document.getElementById("imgContainer");
 			var ss = el.getElementsByClassName("image").length;
@@ -282,7 +282,7 @@
 		var txt = document.createTextNode(t);
 		var elem = document.createElement("div");
 		var img = document.createElement("img");
-		img.src = "del_tag.png";
+		img.src = "img/del_tag.png";
 		img.classList.add("del");
 		img.addEventListener("click", function(){document.getElementById("tagswnd").removeChild(img.parentElement);});
 		elem.appendChild(txt);
