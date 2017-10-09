@@ -1,6 +1,7 @@
-	function load(){
+/*	function load(){
 		fillContainer();
-		var curr = localStorage.getItem("currentUser");
+//		var curr = localStorage.getItem("currentUser");
+		var curr = currentUser;
 		if(curr === "undefined" || curr === null)
 			return;
 		var obj = JSON.parse(localStorage.getItem(curr));
@@ -11,12 +12,17 @@
 		loadUserData();
 
 	}
-
+*/
 //////Login
 //			localStorage.setItem("John@mail.com", '{"name":"John", "passw":"123456"}');
 //			localStorage.setItem("Mary@mail.com", '{"name":"Mary", "passw":"654321"}');
 //			localStorage.setItem("David@mail.com", '{"name":"David", "passw":"qwerty"}');
 			
+	var currentUser = "";
+	var user = {};
+	var usersArray = [];
+	var img = [];
+	var imagesArray=[];
 	function userNameIsValid(fName){
 		var x = document.forms[fName]["username"].value;
 		if(!/^[a-zA-Z]+$/.test(x)){
@@ -75,6 +81,7 @@
 		var pwd ="";
 		if(!checkSignUp())
 			return;
+
 		if(document.forms["fSignUp"]["pwd"].value === document.forms["fSignUp"]["reppwd"].value){
 			pwd = document.forms["fSignUp"]["pwd"].value;
 		}
@@ -82,29 +89,75 @@
 			alert("Password doesn'n match");
 			return;
 		}
-		var strInsert = "'{\"name\":" + usr + ",\"passw:\"" + pwd + "\"}'";
-		localStorage.setItem(mail, strInsert);
-		localStorage.setItem("currentUser", mail);
-		document.getElementById("AccessWnd").style.display = "none";
+		var user = {"name": usr,
+					"mail": mail,
+					"passw": pwd,
+					};
+		usersArray.push(user);
+		currentUser = mail;
+				console.log(usersArray);
+//		var userStr = "'{\"name\":" + usr + ",\"passw:\"" + pwd + "\"}'";
+//		localStorage.setItem(mail, strInsert);
+
+//		localStorage.setItem("currentUser", mail);
+
+		hideAccessWnd();
 		document.getElementById("inout").setAttribute("src", "img/logout.png");
 		document.getElementById("greet").innerHTML = "Hi, " + usr + "!";
 		document.getElementById("addimage").style.display = "block";
 	}
 		
+	function clearSignIn(){
+		document.forms["fSignIn"]["email"].value = "";
+		document.forms["fSignIn"]["pwd"].value = "";
+	}
+	
+	function clearSignUp(){
+		document.forms["fSignUp"]["username"].value = "";
+		document.forms["fSignUp"]["email"].value = "";
+		document.forms["fSignUp"]["pwd"].value = "";
+		document.forms["fSignUp"]["reppwd"].value = "";
+	}
+	
+	function hideAccessWnd(){
+		clearSignIn();
+		clearSignUp();
+		document.getElementById("SignUp").style.display = "none";
+		document.getElementById("SignIn").style.display = "block";
+		document.getElementById("AccessWnd").style.display = "none";		
+	}
+	
 	function onLogin(){
 		var usr = document.forms["fSignIn"]["email"].value;
-		var obj = JSON.parse(localStorage.getItem(usr));
+	//	var obj = JSON.parse(localStorage.getItem(usr));
+		console.log(usersArray.count);
+		if(usersArray.length === 0){
+			clearSignIn();
+			alert("Please, sign up. You have no account");
+			document.getElementById("SignUp").style.display = "block";
+			document.getElementById("SignIn").style.display = "none";
+			return;
+		}
+		var i=0;
+		for(i=0; i < usersArray.length; i++)
+			if(usersArray[i]["mail"] === usr)
+				break;
+		var obj = usersArray[i];
 		if(obj === null){
 			alert("Incorrect E-mail address");
-			document.forms["fSignIn"]["email"].value = "";
-			document.forms["fSignIn"]["pwd"].value = "";
+			clearSignIn();
+			alert("Please, sign up. You have no account");
+			document.getElementById("SignUp").style.display = "block";
+			document.getElementById("SignIn").style.display = "none";
+			return;
 		} else if(document.forms["fSignIn"]["pwd"].value !== obj.passw){
 			alert("incorrect password");
 			document.forms["fSignIn"]["pwd"].value = "";
 		}else{
 			document.getElementById("greet").innerHTML = "Hi, " + obj.name + "!";
-			localStorage.setItem("currentUser", usr);
-			document.getElementById("AccessWnd").style.display = "none";
+			currentUser = usr;
+//			localStorage.setItem("currentUser", usr);
+			hideAccessWnd();
 			document.getElementById("inout").setAttribute("src", "img/logout.png");
 			document.getElementById("addimage").style.display = "block";
 		}
@@ -113,13 +166,14 @@
 		
 	function access(){
 		if(document.getElementById("inout").getAttributeNode("src").value === "img/logout.png"){
-			localStorage.setItem("currentUser", "undefined");
+			currentUser = "undefined";
+			tag_name = "";
+//			localStorage.setItem("currentUser", "undefined");
 			document.getElementById("greet").innerHTML = "";
 			document.getElementById("inout").setAttribute("src", "img/login.png");
 			document.getElementById("addimage").style.display = "none";
 			var el = document.getElementById("imgContainer");
 			var ss = el.getElementsByClassName("image").length;
-			console.log(ss);
 			while(el.hasChildNodes()) {
 				if(el.lastChild.id === "addimage")
 					break;
@@ -130,6 +184,16 @@
 			document.getElementById("AccessWnd").style.display = "block";
 		}
 	}	
+		
+	function close(){
+		clearImage();
+		document.getElementById("winadd").style.visibility = "hidden";
+	}
+	
+	function open(){
+		clearImage();
+		document.getElementById("winadd").style.visibility = "visible";
+	}
 		
 	function scrollFunction(){
 		var scrollTop = $(document).scrollTop();
@@ -152,7 +216,6 @@
 		while (el.hasChildNodes()) {
 			el.removeChild(el.lastChild);
 		}
-		
 	}
 		
 	function publish(){
@@ -171,40 +234,49 @@
 		if(descr.length === 0){
 			alert("Please, fill the description field");
 		}
-		var curr = localStorage.getItem("currentUser");
-		var store = {
+		var curr = currentUser;//localStorage.getItem("currentUser");
+		img = {
 			"user": curr,
 			"file": fName,
 			"tags":tagStr,
 			"descr":descr
 		};
-		var tmp = [];
-		if( localStorage.getItem("images") !== null){
+//		var tmp = [];
+/*		if( localStorage.getItem("images") !== null){
 			tmp = JSON.parse(localStorage.getItem("images"));
 			console.log(tmp.length);
 		}
-		tmp.push(store);
-		localStorage.setItem("images", JSON.stringify(tmp));
-		
+		*/
+//		tmp.push(store);
+//		localStorage.setItem("images", JSON.stringify(tmp));
+		imagesArray.push(img);
 		document.getElementById("winadd").style.visibility = "hidden";
+		var div = createImage(img.file, img.tags);
+		document.getElementById("imgContainer").insertBefore(div, document.getElementById("addimage").nextSibling);
 	}
 	
 	function loadUserData(){
-		var temp = localStorage.getItem("images");
-		if(temp === null)
-			return;
+//		var temp = imagesArray;//localStorage.getItem("images");
+//		if(imagesArray.length === null)
+//			return;
 	
-		var data = JSON.parse(temp);
-		var curr = localStorage.getItem("currentUser");
-		var div;
-		console.log(data.length);
-		for(var i=0; i < data.length; i++){
-			console.log(data[i].user);
-			if(data[i].user !== curr)
+//		var i=0;
+		for( var i=0; i < imagesArray.length; i++){
+			if(imagesArray[i].user !== currentUser)
 				continue;
-			div = createImage(data[i].file, data[i].tags);
+			var div = createImage(imagesArray[i].file, imagesArray[i].tags);
 			document.getElementById("imgContainer").insertBefore(div, document.getElementById("addimage").nextSibling);
 		}
+/*		var data = JSON.parse(temp);
+		var curr = currentUser;//localStorage.getItem("currentUser");
+		var div;
+//		console.log(data.length);
+		for(var i=0; i < data.length; i++){
+	//		console.log(data[i].user);
+			if(data[i].user !== curr)
+				continue;
+
+		}*/
 	}
 	
 	var tag_name = new String;
@@ -229,11 +301,10 @@
 		div.appendChild(a);
 		return div;
 	}
+	
 	function chooseByTag(val){
-		console.log(val);
 		if(val !== tag_name)
 			tag_name = (val === undefined || val === null) ? document.forms["search"]["string"].value : val.innerHTML;
-		console.log(tag_name);
 		var imgs = document.getElementById("imgContainer").getElementsByClassName("image");
 		for(var i=1; i < imgs.length; i++){
 			var tt = imgs[i].getAttribute("tag").toLowerCase();
@@ -247,6 +318,7 @@
 	function allowDrop(ev){
 		ev.preventDefault();
 	}
+	
 	function drop(ev){
 		ev.preventDefault();
 		var ff = ev.dataTransfer.files[0];
@@ -264,7 +336,6 @@
 			reader.readAsDataURL(ff);
 		}
 		document.forms["fAddMedia"]["filename"].value = ff.name;
-		console.log(img.src);
 	}
 	
 	function inputFile(){
@@ -277,6 +348,7 @@
 	for(var i=0; i < els.length; i++){
 		els[i].addEventListener("click", function(){document.getElementById("tagswnd").removeChild(this.parentElement);});
 	}
+	
 	function addTag(){
 		var t = document.forms["fAddMedia"]["tagTxt"].value;
 		var txt = document.createTextNode(t);
