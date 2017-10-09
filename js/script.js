@@ -138,11 +138,14 @@
 			document.getElementById("SignIn").style.display = "none";
 			return;
 		}
+		var obj = null;
 		var i=0;
 		for(i=0; i < usersArray.length; i++)
-			if(usersArray[i]["mail"] === usr)
+			if(usersArray[i]["mail"] === usr){
+				obj = usersArray[i];
 				break;
-		var obj = usersArray[i];
+			}
+		
 		if(obj === null){
 			alert("Incorrect E-mail address");
 			clearSignIn();
