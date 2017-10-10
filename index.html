@@ -39,12 +39,7 @@
 				<p >Add New Image</p>
 			</div>
 		</div>
-		<div id="loader" style="height: 120px">
-			<div class="loader-wheel">
-			  <i><i><i><i><i><i><i><i><i><i><i><i>
-			  </i></i></i></i></i></i></i></i></i></i></i></i>
-		</div>
-	</div>
+
 	<div id="winadd" class="shadow">
 		<div id="close"><img src="img/del_tag.png"></div>
 		<div id="addimg">
@@ -89,6 +84,7 @@
 		</div>
 	</div>
 	<div id="AccessWnd" class="shadow">
+		<div id="closeAcc"><img src="img/del_tag.png"></div>
 		<div id="SignIn" class="AccessForm">
 			<form name="fSignIn" style="">
 				<p ><b>SIGN IN</b></p>
@@ -136,11 +132,13 @@
 		$(document).ready(function(){
 		//	load();
 			fillContainer();
+			window.scrollTo(0,0);
 		})
 		document.getElementById("inout").addEventListener("click", access);
 
 		document.getElementById("addimage").addEventListener("click", open);
-		document.getElementById("close").getElementsByTagName("img")[0].addEventListener("click", close);						
+		document.getElementById("close").getElementsByTagName("img")[0].addEventListener("click", close);
+		document.getElementById("closeAcc").getElementsByTagName("img")[0].addEventListener("click", hideAccessWnd);
 		addEventListener("scroll", scrollFunction);
 
 		document.getElementById("SignRef").addEventListener("click", function(){

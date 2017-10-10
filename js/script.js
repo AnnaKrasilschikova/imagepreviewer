@@ -1,23 +1,4 @@
-/*	function load(){
-		fillContainer();
-//		var curr = localStorage.getItem("currentUser");
-		var curr = currentUser;
-		if(curr === "undefined" || curr === null)
-			return;
-		var obj = JSON.parse(localStorage.getItem(curr));
-			
-		document.getElementById("greet").innerHTML = "Hi, " + obj.name + "!";
-		document.getElementById("inout").setAttribute("src", "img/logout.png");
-		document.getElementById("addimage").style.display = "block";
-		loadUserData();
-
-	}
-*/
-//////Login
-//			localStorage.setItem("John@mail.com", '{"name":"John", "passw":"123456"}');
-//			localStorage.setItem("Mary@mail.com", '{"name":"Mary", "passw":"654321"}');
-//			localStorage.setItem("David@mail.com", '{"name":"David", "passw":"qwerty"}');
-			
+		
 	var currentUser = "";
 	var user = {};
 	var usersArray = [];
@@ -41,24 +22,14 @@
 	}
 	function passwordIsValid(fName){
 		var x = document.forms[fName]["pwd"].value;
-		var vString = /^(?=.*[0-9])[a-zA-Z0-9]{6,}$/;
+		var vString = /^(?=.*[0-9]+)(?=.*[a-z]+)(?=.*[A-Z]+)[0-9a-zA-Z]{6,}$/;
+		
 		if(!vString.test(x)){
 			return false;
 		}
 		return true;
 	}
-/*			function checkSignIn(){
-				if(!emailIsValid("fSignIn")){
-					alert("not valid e-mail address");
-					return false;
-				}	
-				if(!passwordIsValid("fSignIn")){
-					alert("not valid password");
-					return false;
-				}
-				return true;
-			}
-*/			
+
 	function checkSignUp(){
 		if(!userNameIsValid("fSignUp")){
 			alert("not valid username");
@@ -95,12 +66,6 @@
 					};
 		usersArray.push(user);
 		currentUser = mail;
-				console.log(usersArray);
-//		var userStr = "'{\"name\":" + usr + ",\"passw:\"" + pwd + "\"}'";
-//		localStorage.setItem(mail, strInsert);
-
-//		localStorage.setItem("currentUser", mail);
-
 		hideAccessWnd();
 		document.getElementById("inout").setAttribute("src", "img/logout.png");
 		document.getElementById("greet").innerHTML = "Hi, " + usr + "!";
@@ -129,7 +94,6 @@
 	
 	function onLogin(){
 		var usr = document.forms["fSignIn"]["email"].value;
-	//	var obj = JSON.parse(localStorage.getItem(usr));
 		console.log(usersArray.count);
 		if(usersArray.length === 0){
 			clearSignIn();
@@ -159,7 +123,6 @@
 		}else{
 			document.getElementById("greet").innerHTML = "Hi, " + obj.name + "!";
 			currentUser = usr;
-//			localStorage.setItem("currentUser", usr);
 			hideAccessWnd();
 			document.getElementById("inout").setAttribute("src", "img/logout.png");
 			document.getElementById("addimage").style.display = "block";
@@ -171,7 +134,6 @@
 		if(document.getElementById("inout").getAttributeNode("src").value === "img/logout.png"){
 			currentUser = "undefined";
 			tag_name = "";
-//			localStorage.setItem("currentUser", "undefined");
 			document.getElementById("greet").innerHTML = "";
 			document.getElementById("inout").setAttribute("src", "img/login.png");
 			document.getElementById("addimage").style.display = "none";
@@ -209,9 +171,7 @@
 		}
 	}
 		
-/////////////////
 	function clearImage(){
-
 		document.getElementById("inputImage").setAttribute("src", "");
 		document.forms["fAddMedia"]["filename"].value = "";
 		document.forms["fAddMedia"]["descr"].value = "";
@@ -222,36 +182,38 @@
 	}
 		
 	function publish(){
-		var fName = imageCode;//document.forms["fAddMedia"]["filename"].value;
+		var fName = imageCode;
 		var tagStr="";
 		var tags = document.getElementById("tagswnd").getElementsByClassName("tag");
+		var str = document.forms["fAddMedia"]["filename"].value.toLowerCase();
+		if(!str.endsWith("png") &&
+				!str.endsWith("jpg") &&
+					!str.endsWith("bmp")){
+			alert("No image to publish");
+			document.forms["fAddMedia"]["filename"].value = "";
+			document.getElementById("inputImage").setAttribute("src", "");
+			return;
+		}
 		for(var i=0; i < tags.length; i++){
 			tagStr += tags[i].childNodes[0].nodeValue;
 			tagStr += ", ";
 		}
 		if(tagStr.length === 0){
 			alert("Please, fill all tags field");
-			
+			return;
 		}
 		var descr = document.forms["fAddMedia"]["descr"].value;
 		if(descr.length === 0){
 			alert("Please, fill the description field");
+			return;
 		}
-		var curr = currentUser;//localStorage.getItem("currentUser");
+		var curr = currentUser;
 		img = {
 			"user": curr,
 			"file": fName,
 			"tags":tagStr,
 			"descr":descr
 		};
-//		var tmp = [];
-/*		if( localStorage.getItem("images") !== null){
-			tmp = JSON.parse(localStorage.getItem("images"));
-			console.log(tmp.length);
-		}
-		*/
-//		tmp.push(store);
-//		localStorage.setItem("images", JSON.stringify(tmp));
 		imagesArray.push(img);
 		document.getElementById("winadd").style.visibility = "hidden";
 		var div = createImage(img.file, img.tags);
@@ -259,27 +221,12 @@
 	}
 	
 	function loadUserData(){
-//		var temp = imagesArray;//localStorage.getItem("images");
-//		if(imagesArray.length === null)
-//			return;
-	
-//		var i=0;
 		for( var i=0; i < imagesArray.length; i++){
 			if(imagesArray[i].user !== currentUser)
 				continue;
 			var div = createImage(imagesArray[i].file, imagesArray[i].tags);
 			document.getElementById("imgContainer").insertBefore(div, document.getElementById("addimage").nextSibling);
 		}
-/*		var data = JSON.parse(temp);
-		var curr = currentUser;//localStorage.getItem("currentUser");
-		var div;
-//		console.log(data.length);
-		for(var i=0; i < data.length; i++){
-	//		console.log(data[i].user);
-			if(data[i].user !== curr)
-				continue;
-
-		}*/
 	}
 	
 	var tag_name = new String;
@@ -316,6 +263,7 @@
 			else
 				imgs[i].style.display = "block";
 		}
+		document.forms["search"]["string"].value = "";
 	}
 
 	function allowDrop(ev){
@@ -366,4 +314,3 @@
 		document.getElementById("tagswnd").appendChild(elem);
 		document.forms["fAddMedia"]["tagTxt"].value = "";
 	}
-			
