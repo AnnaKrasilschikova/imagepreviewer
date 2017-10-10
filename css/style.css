@@ -71,7 +71,7 @@ body {background-color: lightgray; font-family: 'Droid Serif', serif;}
 //Container
 #imgContainer {height: auto; margin: auto;}
 div.image {margin: 10px; border:solid ccc 1px; float:left; width: 250px; height: 200px}
-div.image img{width: 100%; height:auto;}
+div.image img{max-width: 250px; max-height: 200px}
 #addimage{float:left; text-align:center; font-size: 90%; display:none}
 #addimage img{width:60%; height: auto; cursor:pointer}
 #addimage p{text-align: center; font-size-adjust}

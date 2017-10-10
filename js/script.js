@@ -321,6 +321,8 @@
 		var elem = document.createElement("div");
 		var img = document.createElement("img");
 		img.src = "img/del_tag.png";
+		img.setAttribute("width", "auto");
+		img.setAttribute("height", "auto");
 		img.classList.add("del");
 		img.addEventListener("click", function(){document.getElementById("tagswnd").removeChild(img.parentElement);});
 		elem.appendChild(txt);
