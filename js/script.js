@@ -4,6 +4,7 @@
 	var usersArray = [];
 	var img = [];
 	var imagesArray=[];
+	
 	function userNameIsValid(fName){
 		var x = document.forms[fName]["username"].value;
 		if(!/^[a-zA-Z]+$/.test(x)){
@@ -15,15 +16,24 @@
 		var x = document.forms[fName]["email"].value;
 		var atpos = x.indexOf("@");
 		var dotpos = x.lastIndexOf(".");
-		if(atpos < 1 || dotpos<atpos+2 || dotpos+2==x.length){
-			return false;
-		}
-		return true;
+		var ret = ""; //"Not valid email: ";
+		var tmp = "";
+		if(atpos === -1)
+			tmp += "   - missing '@' \n";
+		if(dotpos === -1)
+			tmp += "   - missing '.' \n";
+		if(atpos < 1)
+			tmp += "   - wrong position of '@' \n";
+		if(atpos > dotpos)
+			tmp += "   - wrong format of email string";
+		if(tmp.length > 0)
+			ret = "Not valid email: \n".concat(tmp);
+		return ret;
 	}
+	
 	function passwordIsValid(fName){
 		var x = document.forms[fName]["pwd"].value;
 		var vString = /^(?=.*[0-9]+)(?=.*[a-z]+)(?=.*[A-Z]+)[0-9a-zA-Z]{6,}$/;
-		
 		if(!vString.test(x)){
 			return false;
 		}
@@ -35,12 +45,14 @@
 			alert("not valid username");
 			return false;
 		}
-		if(!emailIsValid("fSignUp")){
-			alert("not valid email address");
+		var tmp = emailIsValid("fSignUp");
+
+		if(tmp.length > 1){
+			alert(tmp);
 			return false;
 		}
 		if(!passwordIsValid("fSignUp")){
-			alert("not valid password");
+			alert("Not valid password. \n\nRequired: - at least 6 characters long, \n          - at least one lowercase letter, \n          - one uppercase letter, \n          - one digit, \n          - no special symbols");
 			return false;
 		}
 		return true;
@@ -94,7 +106,6 @@
 	
 	function onLogin(){
 		var usr = document.forms["fSignIn"]["email"].value;
-		console.log(usersArray.count);
 		if(usersArray.length === 0){
 			clearSignIn();
 			alert("Please, sign up. You have no account");
@@ -172,7 +183,7 @@
 	}
 		
 	function clearImage(){
-		document.getElementById("inputImage").setAttribute("src", "");
+		document.getElementById("inputImage").setAttribute("src", "img/open.png");
 		document.forms["fAddMedia"]["filename"].value = "";
 		document.forms["fAddMedia"]["descr"].value = "";
 		var el = document.getElementById("tagswnd");
@@ -302,6 +313,10 @@
 	
 	function addTag(){
 		var t = document.forms["fAddMedia"]["tagTxt"].value;
+		if(t.length === 0){
+			alert("Tag with null name can not be added");
+			return;
+		}
 		var txt = document.createTextNode(t);
 		var elem = document.createElement("div");
 		var img = document.createElement("img");

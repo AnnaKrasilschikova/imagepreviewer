@@ -45,15 +45,7 @@
 		<div id="addimg">
 			<p>ADD IMAGE</p>
 			<div  id="drop" ondrop="drop(event)" ondragover="allowDrop(event)">
-			<img src=""	id="inputImage" width="310px" height="auto" alt=""> 
-<!--				<div id="bckg">
-					<img src="add_pict.png">
-					<p><b>Drag in your media</b></p>
-					<p id="txt1">
-						Find media on your hard drive, then drag them <br> in to automatically upload
-					</p>
-				</div> -->
-			
+				<img src="img/open.png"	id="inputImage" width="auto" height="auto" alt=""> 
 			</div>
 			<div id="open">
 				<div id="file_input">
@@ -68,16 +60,16 @@
 		<div id="addinfo">
 			<p>ADD INFO</p>
 			<form name="fAddMedia" >
-				Name your media <br>
+				Name your media <span class="required">  *</span><br>
 				<input type="text" name="filename" style="width: 100%" required> <br> <br>
-				Add tags <br>
+				Add tags <span class="required">  *</span><br>
 				<div id="tagswnd">
 				</div>
 				<div id="tagadd"> 
 					<input type="text" name="tagTxt" placeholder="Write a tag..." style="border:none">
 					<input type="button" value="Add tag" onclick="addTag()">
 				</div> 
-				<br>Add description <br>
+				<br>Add description <span class="required">  *</span><br>
 				<textarea name="descr" style="width: 100%; height: 100px; required"></textarea>
 				<input type="button" class="publish" value="Pablish" onclick="publish()">
 			</form>
@@ -90,7 +82,7 @@
 				<p ><b>SIGN IN</b></p>
 				<input type="email" name="email" placeholder="E-mail">
 				<br><br>
-				<input type="password" name="pwd" placeholder="Passowrd">
+				<input type="password" name="pwd" placeholder="Password">
 				<br><br>
 				<input type="button" onclick="onLogin()" value="Login">
 			</form>
@@ -100,13 +92,13 @@
 		<div id="SignUp" class="AccessForm">
 			<form name="fSignUp" >
 				<p><b>SIGN UP</b></p>
-				<input type="text" name="username" placeholder="Username">
+				<input type="text" name="username" placeholder="Username"><span class="required">  *</span>
 				<br> <br>
-				<input type="email" name="email" placeholder="E-mail">
+				<input type="email" name="email" placeholder="E-mail"><span class="required">  *</span>
 				<br> <br>
-				<input type="password" name="pwd" placeholder="Password">
+				<input type="password" name="pwd" placeholder="Password"><span class="required">  *</span>
 				<br> <br>
-				<input type="password" name="reppwd" placeholder="Retype password">
+				<input type="password" name="reppwd" placeholder="Retype password"><span class="required">  *</span>
 				<br> <br>
 				<input type="button" onclick="onSignUp()" value="SIGN ME UP">
 				<br>
